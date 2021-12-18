@@ -34,3 +34,22 @@ the first parameter is the file path of the jpeg image and the second parameter 
 Ten sample images have been uploaded, of which all are correctly read.
 
 If you are using Windows 10 or later, you can make use of the Windows Subsystem Linux to install various flavours of virtual Linux machines to compile and run the code.
+
+The image_process(matrix,height,width,150,he,wi,new_dir_name,ret,debug) function takes the following
+matrix: a byte** array containing the RGB data for the input image
+height: the height of the input image
+width: the width of the input image
+he: the height of the cropped output image
+wi: the width of the cropped output image
+new_dir_name: the directory where the processed images will be stored. These images will only be generated if debug is on and opencv i installed.
+ret: a byte** array of the RGB cropped image
+debug: a boolean to turn on or off debug
+
+The getScanline(ret,he,wi,debug,k) function takes the following
+ret: the byte** array of the RGB values of the cropped image, obtained from the image_process step
+he: the height of the cropped image, obtained from the image_process step
+wi: the width of the cropped image, obtained from the image_process step
+debug: turns debug on or off
+k: the scanline is one horizontal line of the cropped image. k is the fraction of the total height at which the scanline is taken.
+  The program samples the horizontal scanline at various point for(double k=0.25;k<1.0;k=k+0.25). This is necessary as some barcode are from flat surfaces and are not deformed
+  but some are from curved surfaces and some are when the camera is tilted so that the top of the barcode image is wider than the bottom of the imge
