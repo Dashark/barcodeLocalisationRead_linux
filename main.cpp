@@ -1094,7 +1094,7 @@ printArray(crop,h,w,new_dir_name,"cropped.jpg");
 }
 
 
-vector<long double> getScanline(byte** matrix,int height,int width,string file_name,bool print,double k)
+vector<long double> getScanline(byte** matrix,int height,int width,bool print,double k)
 {
 
 	 vector<long double> scanline;
@@ -2858,7 +2858,7 @@ string file_name=argv[1];
         debug=true;
     }
 
-   // string file_name="C:\\codeblocks\\barcodeLocalisationRead_linux\\barcodes_mbdb\\barcode_1.jpg";
+//    string file_name="C:\\codeblocks\\barcodeLocalisationRead_linux\\barcodes_mbdb\\barcode_2.jpg";
     string cropped_file_name;
 
     string new_dir_name;
@@ -2921,7 +2921,7 @@ for(double k=0.25;k<1.0;k=k+0.25)
 
 
 
-     vector<long double> scanline=getScanline(ret,he,wi,cropped_file_name,debug,k);
+     vector<long double> scanline=getScanline(ret,he,wi,debug,k);
 
 
 
