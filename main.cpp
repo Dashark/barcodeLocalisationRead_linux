@@ -170,7 +170,20 @@ void printArray(byte **matrix, int height, int width, string new_dir_name, strin
     imwrite(new_dir_name + new_file_name, output_temp);
 }
 
-void image_process(cv::Mat &orig, byte **img, int height, int width, double threshold_limit, int &he, int &wi, string new_dir_name, byte **(&arr2), bool print)
+/**
+ * @brief 
+ * 
+ * @param orig 
+ * @param img 
+ * @param height 
+ * @param width 
+ * @param threshold_limit 
+ * @param he 
+ * @param wi 
+ * @param new_dir_name 
+ * @param print 
+ */
+cv::Rect image_process(byte **img, int height, int width, double threshold_limit, int &he, int &wi, string new_dir_name, byte **(&arr2), bool print)
 {
 
     byte **rot = new byte *[height];
@@ -911,9 +924,6 @@ void image_process(cv::Mat &orig, byte **img, int height, int width, double thre
     int w = max_x - min_x;
 
     printf("\n croped size %d, %d, %d, %d", min_x, max_x, min_y, max_y);
-    cv::Point pt1(min_x, min_y), pt2(max_x, max_y);
-    cv::rectangle(orig, pt1, pt2, cv::Scalar(0,255,0), 3);
-    imwrite(new_dir_name + "orig.jpg", orig);
     byte **crop = new byte *[(max_y - min_y)];
     for (int i = 0; i < (max_y - min_y); i++)
     {
@@ -959,7 +969,7 @@ void image_process(cv::Mat &orig, byte **img, int height, int width, double thre
         delete[] matrix[i];
     }
 
-    // return ret;
+    return cv::Rect(min_x, min_y, w, h);
     //			  		return new_dir_name+"cropped.jpg";
 }
 
@@ -973,7 +983,7 @@ void image_process(cv::Mat &orig, byte **img, int height, int width, double thre
  * @param k 扫描位置因子
  * @return vector<long double> 
  */
-vector<long double> getScanline(byte **matrix, int height, int width, bool print, double k)
+vector<long double> getScanline(byte **matrix, int height, int width, bool print, double k, int &left)
 {
 
     vector<long double> scanline;
@@ -1062,6 +1072,7 @@ vector<long double> getScanline(byte **matrix, int height, int width, bool print
         printf("\nindex_of_last_black_pixel %d", index_of_last_black_pixel);
         printf("\nscanline length %llu", scanline.size());
     }
+    left = index_of_first_black_pixel;
     return scanline;
 }
 
@@ -2597,12 +2608,17 @@ int main(int argc, char *argv[])
     string lhs = "0000000";
     string rhs = "000000";
     // 图像处理一次
-    image_process(img, matrix, height, width, 150, he, wi, new_dir_name, ret, debug);
+    cv::Rect crop = image_process(matrix, height, width, 150, he, wi, new_dir_name, ret, debug);
     // 条码只需要一次行扫描
     // 这儿相当于取了三行尝试
     for (double k = 0.25; k < 1.0; k = k + 0.25)
     {
-        vector<long double> scanline = getScanline(ret, he, wi, debug, k);
+        int left = 0;
+        vector<long double> scanline = getScanline(ret, he, wi, debug, k, left);
+        crop.x = crop.x + left;
+        // cv::Point pt1(min_x, min_y), pt2(max_x, max_y);
+        cv::rectangle(img, crop.tl(), crop.br(), cv::Scalar(0,255,0), 3);
+        cv::imwrite(new_dir_name + "orig.jpg", img);
 
         vector<vector<int>> Bars = bars(scanline, debug);
 
