@@ -2542,6 +2542,12 @@ string int_to_string(int i)
 
 // void Line(byte** input, float x1, float y1, float x2, float y2, const int color );
 
+// 1. 输入图片被缩放为 640 x 480 分辨率
+// 2. 图像处理后找到条码的所在框（OpenCV处理）
+// 3. 输出条码的第一条线坐标和最后一条线坐标
+// 4. 按照条码的标准解析条码线
+// 5. 解析错误，换个位置重做第4步
+// 6. 解析成功则返回条码信息
 int main(int argc, char *argv[])
 {
     bool debug = false;
@@ -2608,9 +2614,10 @@ int main(int argc, char *argv[])
     string lhs = "0000000";
     string rhs = "000000";
     // 图像处理一次
+    // crop存在偏差可能性，即可能不是恰好的条码框
     cv::Rect crop = image_process(matrix, height, width, 150, he, wi, new_dir_name, ret, debug);
     // 条码只需要一次行扫描
-    // 这儿相当于取了三行尝试
+    // 如果扫描失败，换个位置尝试。这儿循环相当于取了三行尝试
     for (double k = 0.25; k < 1.0; k = k + 0.25)
     {
         int left = 0;
