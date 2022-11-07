@@ -2548,18 +2548,15 @@ string int_to_string(int i)
 // 4. 按照条码的标准解析条码线
 // 5. 解析错误，换个位置重做第4步
 // 6. 解析成功则返回条码信息
-int main(int argc, char *argv[])
+int barcode(cv::Mat &img)
 {
     bool debug = false;
 
-    string file_name = argv[1];
-
-    if (strcmp(argv[2], "true") == 0)
+    if (0)
     {
         debug = true;
     }
 
-    //    string file_name="C:\\codeblocks\\barcodeLocalisationRead_linux\\barcodes_mbdb\\barcode_2.jpg";
     string cropped_file_name;
 
     string new_dir_name;
@@ -2568,8 +2565,6 @@ int main(int argc, char *argv[])
 
     //   printf("\n new_dir_name %s",new_dir_name.c_str());
     //   printf("\n file_name %s",file_name.c_str());
-    cv::Mat img;
-    img = imread(file_name, cv::IMREAD_COLOR);
     cv::resize(img, img, cv::Size(640, 480));
 
     int height = img.rows;
