@@ -1,9 +1,9 @@
 CXX = g++
-CXXFLAGS += -std=c++11 -Wall -g
+CXXFLAGS += -std=c++11 -Wall -g -lpthread
 CPPFLAGS += `pkg-config --cflags hiredis glib-2.0 opencv`
 LDFLAGS  += `pkg-config --libs   hiredis glib-2.0 opencv`
 
-SRC += main.cpp messager.cpp redis_db.cpp
+SRC += main.cpp messager.cpp redis_db.cpp barcode.cpp
 
 OBJS += $(patsubst %.cpp, %.o, $(SRC))
 

@@ -23,6 +23,8 @@
 #include <list>
 #include <thread>
 
+#include "barcode.h"
+
 using namespace std;
 typedef unsigned char byte;
 struct point
@@ -2559,9 +2561,9 @@ int barcode(cv::Mat &img)
 
     string cropped_file_name;
 
-    string new_dir_name;
-    size_t last_token_index = file_name.find_last_of("/\\");
-    new_dir_name = file_name.substr(0, last_token_index) + "\\";
+    string new_dir_name = ".";
+    //size_t last_token_index = file_name.find_last_of("/\\");
+    //new_dir_name = file_name.substr(0, last_token_index) + "\\";
 
     //   printf("\n new_dir_name %s",new_dir_name.c_str());
     //   printf("\n file_name %s",file_name.c_str());
