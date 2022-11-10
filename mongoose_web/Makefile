@@ -1,9 +1,9 @@
 CXX = g++
 CXXFLAGS += -std=c++11 -Wall -g
-CPPFLAGS += `pkg-config --cflags hiredis glib-2.0 opencv4`
-LDFLAGS  += `pkg-config --libs   hiredis glib-2.0 opencv4` -lpthread
+CPPFLAGS += `pkg-config --cflags hiredis glib-2.0 opencv`
+LDFLAGS  += `pkg-config --libs   hiredis glib-2.0 opencv` -lpthread
 
-SRC += main.cpp mongoose.cpp
+SRC += main.cpp mongoose.cpp ../redis/barcode.cpp
 
 OBJS += $(patsubst %.cpp, %.o, $(SRC))
 

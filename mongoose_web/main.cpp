@@ -1,6 +1,8 @@
 #include "mongoose.h"
 #include <opencv2/opencv.hpp>
 
+#include "../redis/barcode.h"
+
 static const char *s_http_addr = "http://0.0.0.0:8080";    // HTTP port
 
 
@@ -28,6 +30,8 @@ static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
             if (data) {
                 printf("len: %d\n", len);
                 cv::Mat frame(height, width, CV_8UC3, data);
+                BAR_CODE bc = barcode(frame);
+                printf("%s %s", bc.lhs, bc.rhs);
                 cv::imshow("cpp", frame);
                 cv::waitKey();
                 cv::destroyAllWindows();

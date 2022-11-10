@@ -2550,7 +2550,7 @@ string int_to_string(int i)
 // 4. 按照条码的标准解析条码线
 // 5. 解析错误，换个位置重做第4步
 // 6. 解析成功则返回条码信息
-int barcode(cv::Mat &img)
+BAR_CODE barcode(cv::Mat &img)
 {
     bool debug = false;
 
@@ -2610,6 +2610,7 @@ int barcode(cv::Mat &img)
 
     string lhs = "0000000";
     string rhs = "000000";
+    BAR_CODE bc;
     // 图像处理一次
     // crop存在偏差可能性，即可能不是恰好的条码框
     cv::Rect crop = image_process(matrix, height, width, 150, he, wi, new_dir_name, ret, debug);
@@ -2620,6 +2621,7 @@ int barcode(cv::Mat &img)
         int left = 0;
         vector<long double> scanline = getScanline(ret, he, wi, debug, k, left);
         crop.x = crop.x + left;
+        bc.crop = crop;
         // cv::Point pt1(min_x, min_y), pt2(max_x, max_y);
         cv::rectangle(img, crop.tl(), crop.br(), cv::Scalar(0,255,0), 3);
         cv::imwrite(new_dir_name + "orig.jpg", img);
@@ -2715,5 +2717,7 @@ int barcode(cv::Mat &img)
     double time = (double)(end - start);
     printf("\ntime %f\n", time / 1000);
 
-    return 0;
+    bc.lhs = lhs;
+    bc.rhs = rhs;
+    return bc;
 }
